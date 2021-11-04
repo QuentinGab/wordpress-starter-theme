@@ -1,0 +1,20 @@
+{
+  "name": "quentingab/wordpress-starter-theme",
+  "description": "A wordpress starter theme with all you need to build fast and easily",
+  "authors": [
+    {
+      "name": "Quentin Gabriele",
+      "email": "quentin.gabriele@gmail.com"
+    }
+  ],
+  "require": {
+    "illuminate/config": "^8.69",
+    "symfony/finder": "^5.3",
+    "vlucas/phpdotenv": "^5.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}

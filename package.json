@@ -1,0 +1,35 @@
+{
+  "name": "wordpress-starter-theme",
+  "version": "0.0.1",
+  "description": "A Wordpress starter theme to build fast and easily",
+  "scripts": {
+    "dev": "mix",
+    "watch": "mix watch",
+    "watch-poll": "mix watch -- --watch-options-poll=1000",
+    "hot": "mix watch --hot",
+    "prod": "mix --production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QuentinGab/wordpress-starter-theme.git"
+  },
+  "keywords": [
+    "wordpress",
+    "template",
+    "starter"
+  ],
+  "author": "Quentin Gabriele",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/QuentinGab/wordpress-starter-theme/issues"
+  },
+  "homepage": "https://github.com/QuentinGab/wordpress-starter-theme#readme",
+  "dependencies": {
+    "laravel-mix": "^6.0.37"
+  },
+  "devDependencies": {
+    "postcss": "^8.3.11",
+    "sass": "^1.43.4",
+    "sass-loader": "^12.3.0"
+  }
+}
