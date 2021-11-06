@@ -41,7 +41,7 @@ function config($key, $fallback = null)
 	return $config->get($key, $fallback);
 }
 
-function dd($variables = '')
+function dd(...$variables)
 {
 	var_dump($variables);
 	die();
