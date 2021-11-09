@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c3f5aec0910c07f80dc8cd1a140c2fd",
+    "content-hash": "8a13a2fb70570134754add1fa6410213",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -430,6 +430,63 @@
                 "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "quentingab/wordpress-orm",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/QuentinGab/wordpress-orm.git",
+                "reference": "704453dc9fca3a42510626ea9ad279ebcba3fddc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/QuentinGab/wordpress-orm/zipball/704453dc9fca3a42510626ea9ad279ebcba3fddc",
+                "reference": "704453dc9fca3a42510626ea9ad279ebcba3fddc",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=8.0",
+                "squizlabs/php_codesniffer": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "QuentinGab\\WordpressOrm\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "quentin gabriele",
+                    "email": "quentin.gabriele@gmail.com",
+                    "homepage": "https://linkedin.com/in/quentin-gabriele-86b161196/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "WordPress ORM",
+            "homepage": "https://github.com/quentingab/wordpress-orm",
+            "keywords": [
+                "orm",
+                "quentingab",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/QuentinGab/wordpress-orm/issues",
+                "source": "https://github.com/QuentinGab/wordpress-orm/tree/v0.1.0"
+            },
+            "time": "2021-11-09T18:31:43+00:00"
         },
         {
             "name": "symfony/finder",
