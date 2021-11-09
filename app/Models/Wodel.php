@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Exception;
-use Illuminate\Support\Collection;
 
 /**
  * This is a Wordpress Model
@@ -23,9 +23,21 @@ class Wodel extends Base
 
     public ?int $limit = -1;
 
-    public function __construct(array $data = [])
+    public array $acf = [];
+    public array $acf_keys = [
+        // 'my_field' => "field_6189fd5611e1f"
+    ];
+
+    /**
+     * You can casts property with dot notation
+     */
+    protected $casts = [
+        // "acf.my_field"=>"int"
+    ];
+
+    public function __construct(array $data = [], $casts = false)
     {
-        $this->fill($data);
+        $this->fill($data, $casts);
     }
 
     public function get($limit = null)
@@ -42,16 +54,24 @@ class Wodel extends Base
 
         $posts = array_map(
             function ($item) {
+                $data = get_object_vars($item);
+
+                if (function_exists('get_fields')) {
+                    $data_acf = get_fields($data['ID']);
+                    if ($data_acf) {
+                        $data['acf'] = $data_acf;
+                    }
+                }
+
                 return new static(
-                    get_object_vars(
-                        $item
-                    )
+                    $data,
+                    true
                 );
             },
             $posts
         );
 
-        return new Collection($posts);
+        return $posts;
     }
 
     public function all()
@@ -62,6 +82,7 @@ class Wodel extends Base
     public function find($id)
     {
         $this->where('p', $id);
+        $this->where('post_status', "all");
 
         return $this->first();
     }
@@ -70,12 +91,12 @@ class Wodel extends Base
     {
         $posts = $this->get(1);
 
-        return $posts->first();
+        return empty($posts) ? null : $posts[0];
     }
 
     public function save()
     {
-        $isNewPost = !!$this->ID;
+        $isNewPost = isset($this->ID);
 
         if ($isNewPost) {
             $this->creating();
@@ -105,12 +126,38 @@ class Wodel extends Base
             $this->ID = $result;
         }
 
+        //save acf fields
+        if (function_exists('update_field') and $this->acf) {
+            foreach ($this->acf as $name => $value) {
+                if (static::dotGet($this->casts, "acf.$name") === "date") {
+                    $value = date_format(
+                        $value instanceof DateTimeInterface ? $value : date_create($value),
+                        'Y-m-d H:i:s'
+                    );
+                }
+
+                // prefer update with keys if provided
+                if (
+                    $this->acf_keys and
+                    $this->acf_keys[$name]
+                ) {
+                    $name = $this->acf_keys[$name];
+                }
+
+                update_field($name, $value, $this->ID);
+            }
+
+            // do_action('acf/save_post', $this->ID);
+        }
+
         return $this;
     }
 
     public function delete()
     {
         $this->deleting();
+
+        return !!wp_delete_post($this->ID);
     }
 
     public function permalink()
@@ -128,6 +175,7 @@ class Wodel extends Base
         if (!$this->queryBuilder) {
             $this->queryBuilder = new QueryBuilder();
             $this->queryBuilder->where('post_type', '=', $this->post_type);
+            $this->queryBuilder->where('post_status', '=', "all");
         }
     }
 }

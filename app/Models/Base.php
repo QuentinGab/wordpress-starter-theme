@@ -39,17 +39,41 @@ class Base
     protected function fill(array $data, $casts = false)
     {
         if ($casts) {
-            array_walk($data, function (&$value, $key) {
-                if (array_key_exists($key, $this->casts)) {
-                    if (is_callable($this->casts[$key])) {
-                        $value = $this->casts[$key]($value);
-                    } elseif (
-                        $this->casts[$key] === "int"
+
+            foreach ($this->casts as $key => $cast) {
+                $value = static::dotGet($data, $key);
+
+                if ($value) {
+
+                    if (
+                        $cast === "int"
                     ) {
                         $value = intval($value);
+                    } elseif (
+                        $cast === "float"
+                    ) {
+                        $value = floatval($value);
+                    } elseif (
+                        $cast === "string"
+                    ) {
+                        $value = strval($value);
+                    } elseif (
+                        $cast === "date"
+                    ) {
+                        $value = date_create($value);
+                    } elseif (is_callable($cast)) {
+
+                        $value = $cast($value);
                     }
+
+
+                    static::dotSet(
+                        $data,
+                        $key,
+                        $value
+                    );
                 }
-            });
+            }
         }
 
         foreach ($data as $key => $value) {
@@ -110,5 +134,46 @@ class Base
     public function toJson()
     {
         return json_encode($this->toArray());
+    }
+
+    public static function dotGet($array, $key, $default = null)
+    {
+        if (is_null($key)) return $array;
+
+        if (isset($array[$key])) return $array[$key];
+
+        foreach (explode('.', $key) as $segment) {
+            if (
+                !is_array($array) ||
+                !array_key_exists($segment, $array)
+            ) {
+                return value($default);
+            }
+
+            $array = $array[$segment];
+        }
+
+        return $array;
+    }
+
+    public static function dotSet(&$array, $key, $value)
+    {
+        if (is_null($key)) return $array = $value;
+
+        $keys = explode('.', $key);
+
+        while (count($keys) > 1) {
+            $key = array_shift($keys);
+
+            if (!isset($array[$key]) || !is_array($array[$key])) {
+                $array[$key] = array();
+            }
+
+            $array = &$array[$key];
+        }
+
+        $array[array_shift($keys)] = $value;
+
+        return $array;
     }
 }

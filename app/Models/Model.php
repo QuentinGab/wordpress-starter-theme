@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Collection;
-
 class Model extends Base
 {
     protected $table = 'table_example';
@@ -15,6 +13,9 @@ class Model extends Base
         'order' => 'DESC'
     ];
 
+    /**
+     * You have to define updatable columns 
+     */
     protected array $fillable = [
         "prenom",
         "nom"
@@ -37,20 +38,23 @@ class Model extends Base
 
         $this->limit($limit);
 
-        var_dump($this->queryBuilder->buildSqlQuery());
-
         $db = $wpdb->get_results(
             $this->queryBuilder->buildSqlQuery(),
             ARRAY_A
         );
 
         if (empty($db)) {
-            return new Collection();
+            return [];
         }
 
-        return (new Collection($db))->map(function ($item) {
-            return new static($item, true);
-        });
+        $items = array_map(
+            function ($item) {
+                return new static($item, true);
+            },
+            $db
+        );
+
+        return $items;
     }
 
     public function all()
