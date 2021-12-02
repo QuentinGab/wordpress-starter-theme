@@ -12,7 +12,8 @@
     "illuminate/config": "^8.69",
     "symfony/finder": "^5.3",
     "vlucas/phpdotenv": "^5.3",
-    "quentingab/wordpress-orm": "^0.1.0"
+    "quentingab/wordpress-orm": "^0.2.0",
+    "illuminate/support": "^8.70"
   },
   "autoload": {
     "psr-4": {

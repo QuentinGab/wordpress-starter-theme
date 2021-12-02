@@ -5,6 +5,9 @@ if (!defined('WP_DEBUG')) {
 }
 require __DIR__ . '/vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 $config = new \App\Config(__DIR__ . "/config");
 
 /**
@@ -15,7 +18,7 @@ function view($path, $variables = [])
 	$filepath = __DIR__ . $path . ".php";
 
 	if (!file_exists($filepath)) {
-		throw new Exception('The file does not exists');
+		throw new Exception("The file \"$filepath\" does not exists");
 	}
 
 	$output = NULL;
@@ -48,7 +51,7 @@ function dd(...$variables)
 }
 
 add_action('wp_enqueue_scripts', function () {
-	// wp_register_script('child-script', get_stylesheet_directory_uri() . '/public/js/app.js', [], null, true);
+	// wp_enqueue_script('child-script', get_stylesheet_directory_uri() . '/public/js/app.js', [], null, true);
 
 	//if you work on a child theme
 	// wp_enqueue_style('parent-style', get_template_directory_uri() . '/style.css');
@@ -61,6 +64,12 @@ add_action('admin_enqueue_scripts', function () {
 	//enqueue script in admin
 
 }, 100);
+
+add_action('admin_init', function () {
+
+	// add_editor_style(get_stylesheet_directory_uri() . '/public/css/style.css');
+
+});
 
 
 /**

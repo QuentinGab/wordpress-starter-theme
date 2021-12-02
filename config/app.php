@@ -4,5 +4,5 @@
  * Define configuration variables here
  */
 return [
-    "env" => "local"
+    "env" => env("APP_ENV", "local")
 ];
