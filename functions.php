@@ -10,6 +10,8 @@ $dotenv->load();
 
 $config = new \App\Config(__DIR__ . "/config");
 
+$user = QuentinGab\WordpressOrm\User::current();
+
 /**
  * Include php file with scoped variables
  */
@@ -48,6 +50,12 @@ function dd(...$variables)
 {
 	var_dump($variables);
 	die();
+}
+
+function user()
+{
+	global $user;
+	return $user;
 }
 
 add_action('wp_enqueue_scripts', function () {
